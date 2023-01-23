@@ -13,20 +13,33 @@
     </ul>
     <q-btn color="pink" to="nalle">Går till Nalle</q-btn>
     <div>
-      <q-btn color="primary" @click="goToKalle"
-        >Gå till Kalle Kula sidan!</q-btn
-      >
+      <q-btn color="primary" @click="goToKalle">Gå till Kalle Kula sidan!</q-btn>
     </div>
+
+    <div>
+      <ul>
+        <li v-for="student in students" :key="student.id">{{ student.name }}</li>
+      </ul>
+    </div>
+
+    <pre>{{ secondStudent }}</pre>
+
   </q-page>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useDatabaseList, useDatabaseObject } from 'vuefire'
+import { ref as dbRef } from 'firebase/database'
+import { db } from 'src/boot/firebase'
+import { ref } from "vue"
+import { useRouter } from "vue-router"
 
-const router = useRouter();
+const router = useRouter()
 
-function goToKalle() {
-  router.push("/kalle");
+const students = useDatabaseList(dbRef(db, 'students'))
+const secondStudent = useDatabaseObject(dbRef(db, 'students/2'))
+
+function goToKalle () {
+  router.push("/kalle")
 }
 </script>
